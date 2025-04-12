@@ -1,0 +1,9 @@
+# 最大尝试次数
+max-attempts: 3
+
+# 封禁时长（秒）
+ban-duration: 300
+
+# 答案范围
+answer-min: 2
+answer-max: 10 
