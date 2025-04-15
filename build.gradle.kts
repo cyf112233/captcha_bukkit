@@ -21,6 +21,7 @@ repositories {
     maven("https://repo.rosewooddev.io/repository/public/")
     maven("https://s01.oss.sonatype.org/content/groups/public/")
     maven("https://oss.sonatype.org/content/groups/public/")
+    maven("https://repo.opencollab.dev/maven-snapshots/")
 }
 
 dependencies {
