@@ -5,6 +5,8 @@
 <br>
 和别的插件不同的是，他的数学题显示在motd（正常情况下不会复盖您美丽的motd），靠点击刷新按钮的填写答案，所以假人无法进入服务器
 <br>
+↓点击图片查看视频演示↓
+<br>
 [![image](https://github.com/cyf112233/captcha_bukkit/blob/main/image/download.jpg)](https://www.bilibili.com/video/BV1bpdfYtEYw/?share_source=copy_web&vd_source=d50aca3fe1490e0f795ef9b07b0acff8)
 <br>
 如果基言版玩家尝试连接，他将会识别 Floodgate api ，并对基岩版玩家进行绕过
