@@ -3,7 +3,6 @@
 <br>
 <video width="320" height="240" controls>
   <source src="https://www.runoob.com/try/demo_source/movie.mp4" type="video/mp4" />
-  您的浏览器不支持Video标签。
 </video>
 ***所有尝试进入服务器的玩家都会要求写一道数学题，如果多次回答错误将会被封禁一段时间后才可继续尝试***
 <br>
