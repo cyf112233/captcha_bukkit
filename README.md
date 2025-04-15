@@ -1,7 +1,8 @@
 # captcha_bukkit
 一个适用于bukkit服务器的人机验证
 <br>
-<iframe src='//player.bilibili.com/player.html?isOutside=true&aid=114342263525425&bvid=BV1bpdfYtEYw&cid=29432679399&p=1' scrolling='no' border='0' frameborder='no' framespacing='0' allowfullscreen='true'></iframe>
+<html>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=114342263525425&bvid=BV1bpdfYtEYw&cid=29432679399&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe></html>
 ***所有尝试进入服务器的玩家都会要求写一道数学题，如果多次回答错误将会被封禁一段时间后才可继续尝试***
 <br>
 如果回答错误到一定次数，就会对那个ip进行短时间的封禁
