@@ -1,7 +1,0 @@
-name: captcha
-version: '${version}'
-main: byd.cxkcxkckx.captcha.captcha
-api-version: 1.13
-depend: [  ]
-softdepend: [ PlaceholderAPI ]
-authors: [ cxkcxkckx ]
