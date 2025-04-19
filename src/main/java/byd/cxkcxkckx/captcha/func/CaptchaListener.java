@@ -19,11 +19,19 @@ public class CaptchaListener implements Listener {
 
     public CaptchaListener(captcha plugin) {
         this.plugin = plugin;
+        // 初始化时检查插件状态
+        checkPlugins();
+    }
+
+    // 检查插件状态
+    private void checkPlugins() {
         // 检查gun_bot插件是否存在
         Plugin gunBotPlugin = plugin.getServer().getPluginManager().getPlugin("gun_bot");
         if (gunBotPlugin != null && gunBotPlugin.isEnabled()) {
             alwaysVerify = false; // 如果gun_bot存在，则只在攻击时验证
             plugin.getLogger().info("检测到gun_bot插件，将在攻击时进行验证");
+        } else {
+            alwaysVerify = true;
         }
         
         // 尝试加载 Floodgate API
@@ -38,6 +46,9 @@ public class CaptchaListener implements Listener {
 
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        // 每次连接时检查插件状态
+        checkPlugins();
+        
         String ip = event.getAddress().getHostAddress();
         
         // 检查IP是否被封禁
