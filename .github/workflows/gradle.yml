@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: bukkit plugin build and release
 
 on:
   push:
@@ -25,8 +25,11 @@ jobs:
       run: |
         TAG_NAME="v$(date -u +'%Y_%m_%d__%H_%M_%S')"
         BUILD_DATE=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
+        REPO_NAME=$(echo "$GITHUB_REPOSITORY" | cut -d '/' -f2)
+        RELEASE_TITLE="${REPO_NAME}-V${TAG_NAME:1}"
         echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
         echo "BUILD_DATE=${BUILD_DATE}" >> $GITHUB_ENV
+        echo "RELEASE_TITLE=${RELEASE_TITLE}" >> $GITHUB_ENV
 
     - name: Change gradlew permissions
       run: chmod +x ./gradlew
@@ -42,8 +45,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
 
+    # 关键修改：传递 TAG_NAME 作为 Gradle 参数
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -Pversion=${{ env.TAG_NAME }}
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
@@ -62,9 +66,9 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ env.TAG_NAME }}
-        name: ${{ github.event.repository.name }}
+        name: ${{ env.RELEASE_TITLE }}
         body: |
-          ������ 自动化构建发布
+          自动构建发布
           - 构建时间：**${{ env.BUILD_DATE }}**
           - 提交哈希：`${{ github.sha }}`
         draft: false
