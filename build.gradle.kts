@@ -6,7 +6,7 @@ plugins {
     id ("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
-val buildVersion: String = if (project.hasProperty("version")) {
+val buildversion: String = if (project.hasProperty("version")) {
     project.property("version") as String
 } else {
     "unspecified"
