@@ -6,4 +6,83 @@ ban-duration: 300
 
 # 答案范围
 answer-min: 2
-answer-max: 10 
+answer-max: 10
+
+# 数字替换配置
+number-replacements:
+  0: "零"
+  1: "一"
+  2: "二"
+  3: "三"
+  4: "四"
+  5: "五"
+  6: "六"
+  7: "七"
+  8: "八"
+  9: "九"
+
+# 运算符替换配置
+operator-replacements:
+  "+": "加"
+  "-": "减"
+  "×": "乘"
+  "÷": "除以"
+
+# 是否启用文字替换
+enable-text-replacement: true
+
+# 替换概率（0-100）
+replacement-probability: 50
+
+# 干扰字符配置
+noise-characters:
+  - "~"
+  - "`"
+  - "!"
+  - "@"
+  - "#"
+  - "$"
+  - "%"
+  - "^"
+  - "&"
+  - "*"
+  - "("
+  - ")"
+  - "_"
+  - "-"
+  - "+"
+  - "="
+  - "{"
+  - "}"
+  - "["
+  - "]"
+  - "|"
+  - "\\"
+  - ":"
+  - ";"
+  - "\""
+  - "'"
+  - "<"
+  - ">"
+  - ","
+  - "."
+  - "?"
+  - "/"
+
+# 干扰字符出现概率（0-100）
+noise-probability: 100
+
+# 最大干扰字符总数
+max-total-noise: 10
+
+# 最大随机空格数
+max-spaces: 10
+
+# 每个位置最大干扰字符数
+max-noise-per-position: 2
+
+# 算式前最大干扰字符数
+max-prefix-noise: 5
+
+# 算式后最大干扰字符数
+max-suffix-noise: 5 

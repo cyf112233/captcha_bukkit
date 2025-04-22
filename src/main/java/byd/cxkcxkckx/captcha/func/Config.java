@@ -1,7 +1,6 @@
 package byd.cxkcxkckx.captcha.func;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import byd.cxkcxkckx.captcha.captcha;
 
 public class Config {
     private static int maxAttempts = 3;
@@ -9,10 +8,7 @@ public class Config {
     private static int answerMin = 2;
     private static int answerMax = 10;
 
-    public static void loadConfig(captcha plugin) {
-        plugin.saveDefaultConfig();
-        FileConfiguration config = plugin.getConfig();
-        
+    public static void loadConfig(FileConfiguration config) {
         maxAttempts = config.getInt("max-attempts", 3);
         banDuration = config.getInt("ban-duration", 300);
         answerMin = config.getInt("answer-min", 2);

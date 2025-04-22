@@ -31,9 +31,13 @@ public class captcha extends BukkitPlugin {
     }
 
     @Override
-    protected void afterEnable() {
+    public void onEnable() {
+        // 保存默认配置
+        saveDefaultConfig();
+        
         // 加载配置
-        Config.loadConfig(this);
+        Config.loadConfig(getConfig());
+        MathProblem.loadConfig(getConfig());
         
         // 创建并注册监听器
         captchaListener = new CaptchaListener(this);

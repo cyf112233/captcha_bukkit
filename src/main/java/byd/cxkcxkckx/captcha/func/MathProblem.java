@@ -3,6 +3,9 @@ package byd.cxkcxkckx.captcha.func;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.List;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 
 public class MathProblem {
     private static final Random random = new Random();
@@ -10,6 +13,168 @@ public class MathProblem {
     private static final Map<String, Integer> playerAttempts = new HashMap<>();
     private static final Map<String, Integer> playerErrorCounts = new HashMap<>();
     private static final Map<String, Long> bannedIPs = new HashMap<>();
+    private static Map<String, String> numberReplacements = new HashMap<>();
+    private static Map<String, String> operatorReplacements = new HashMap<>();
+    private static boolean enableTextReplacement = true;
+    private static int replacementProbability = 50;
+    private static List<String> noiseCharacters;
+    private static int noiseProbability = 30;
+    private static int maxTotalNoise = 10;
+    private static int maxSpaces = 10;
+    private static int maxPrefixNoise = 5;
+    private static int maxSuffixNoise = 5;
+
+    public static void loadConfig(FileConfiguration config) {
+        // 加载数字替换配置
+        if (config.contains("number-replacements")) {
+            for (String key : config.getConfigurationSection("number-replacements").getKeys(false)) {
+                numberReplacements.put(key, config.getString("number-replacements." + key));
+            }
+        }
+
+        // 加载运算符替换配置
+        if (config.contains("operator-replacements")) {
+            for (String key : config.getConfigurationSection("operator-replacements").getKeys(false)) {
+                operatorReplacements.put(key, config.getString("operator-replacements." + key));
+            }
+        }
+
+        // 加载是否启用文字替换
+        enableTextReplacement = config.getBoolean("enable-text-replacement", true);
+        
+        // 加载替换概率
+        replacementProbability = config.getInt("replacement-probability", 50);
+        
+        // 加载干扰字符配置
+        noiseCharacters = config.getStringList("noise-characters");
+        noiseProbability = config.getInt("noise-probability", 30);
+        maxTotalNoise = config.getInt("max-total-noise", 10);
+        maxSpaces = config.getInt("max-spaces", 10);
+        maxPrefixNoise = config.getInt("max-prefix-noise", 5);
+        maxSuffixNoise = config.getInt("max-suffix-noise", 5);
+    }
+
+    private static String addRandomSpaces() {
+        StringBuilder spaces = new StringBuilder();
+        int spaceCount = random.nextInt(maxSpaces) + 1;
+        for (int i = 0; i < spaceCount; i++) {
+            spaces.append(" ");
+        }
+        return spaces.toString();
+    }
+
+    private static String addNoise(String text) {
+        StringBuilder result = new StringBuilder();
+        
+        // 随机决定是否添加干扰字符
+        if (random.nextInt(100) < noiseProbability) {
+            // 随机决定总干扰字符数
+            int totalNoise = random.nextInt(maxTotalNoise) + 1;
+            
+            // 随机分配干扰字符到前后
+            int prefixNoise = random.nextInt(totalNoise + 1);
+            int suffixNoise = totalNoise - prefixNoise;
+            
+            // 在算式前添加连续的干扰字符
+            StringBuilder prefix = new StringBuilder();
+            for (int i = 0; i < prefixNoise; i++) {
+                if (!noiseCharacters.isEmpty()) {
+                    prefix.append(noiseCharacters.get(random.nextInt(noiseCharacters.size())));
+                }
+            }
+            if (prefix.length() > 0) {
+                result.append(prefix);
+                result.append(addRandomSpaces());
+            }
+        }
+        
+        // 添加算式
+        result.append(text);
+        
+        // 在算式后添加干扰字符
+        if (random.nextInt(100) < noiseProbability) {
+            // 随机决定总干扰字符数
+            int totalNoise = random.nextInt(maxTotalNoise) + 1;
+            
+            // 随机分配干扰字符到前后
+            int prefixNoise = random.nextInt(totalNoise + 1);
+            int suffixNoise = totalNoise - prefixNoise;
+            
+            // 在算式后添加连续的干扰字符
+            StringBuilder suffix = new StringBuilder();
+            for (int i = 0; i < suffixNoise; i++) {
+                if (!noiseCharacters.isEmpty()) {
+                    suffix.append(noiseCharacters.get(random.nextInt(noiseCharacters.size())));
+                }
+            }
+            if (suffix.length() > 0) {
+                result.append(addRandomSpaces());
+                result.append(suffix);
+            }
+        }
+        
+        return result.toString();
+    }
+
+    private static String addRandomSpaces(String text) {
+        StringBuilder result = new StringBuilder();
+        String[] parts = text.split(" ");
+        
+        for (int i = 0; i < parts.length; i++) {
+            result.append(parts[i]);
+            if (i < parts.length - 1) {
+                // 在运算符前后添加随机数量的空格
+                int spaces = random.nextInt(maxSpaces) + 1;
+                for (int j = 0; j < spaces; j++) {
+                    result.append(" ");
+                }
+            }
+        }
+        
+        return result.toString();
+    }
+
+    private static String replaceNumbersAndOperators(String text) {
+        if (!enableTextReplacement) {
+            return addNoise(addRandomSpaces(text));
+        }
+
+        StringBuilder result = new StringBuilder();
+        String[] parts = text.split(" ");
+        
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            // 检查是否是数字
+            if (part.matches("\\d+")) {
+                if (random.nextInt(100) < replacementProbability) {
+                    // 随机决定是否替换这个数字
+                    result.append(numberReplacements.getOrDefault(part, part));
+                } else {
+                    result.append(part);
+                }
+            }
+            // 检查是否是运算符
+            else if (operatorReplacements.containsKey(part)) {
+                if (random.nextInt(100) < replacementProbability) {
+                    // 随机决定是否替换这个运算符
+                    result.append(operatorReplacements.getOrDefault(part, part));
+                } else {
+                    result.append(part);
+                }
+            }
+            // 其他字符（如空格）保持不变
+            else {
+                result.append(part);
+            }
+            
+            // 在运算符前后添加随机空格
+            if (i < parts.length - 1) {
+                result.append(addRandomSpaces());
+            }
+        }
+        
+        return addNoise(result.toString().trim());
+    }
 
     public static class Problem {
         private final String question;
@@ -68,7 +233,10 @@ public class MathProblem {
             return generateProblem();
         }
 
-        return new Problem(question, answer);
+        // 应用文字替换
+        String replacedQuestion = replaceNumbersAndOperators(question);
+
+        return new Problem(replacedQuestion, answer);
     }
 
     public static void setPlayerProblem(String ip, Problem problem) {
